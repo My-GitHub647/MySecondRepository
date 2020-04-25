@@ -1,0 +1,395 @@
+doctype html
+head
+  title
+    | How to test if an element is in the viewport with vanilla JavaScript | Go Make Things
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no')
+  link(rel='shortcut icon' href='/images/favicon.ico')
+  link(rel='icon' href='/images/favicon.ico' type='image/x-icon')
+  link(rel='shortcut icon' href='/images/favicon.ico' type='image/x-icon')
+  link(rel='stylesheet' href='/stylesheets/main.css')
+.wrapper
+  header.header
+    a.main-page(href='')
+      img(src='/images/favicon.ico' width='19px' height='19px')
+      | Go Make Things
+    nav.navigation
+      ul
+        li
+          a(href='') About
+        li
+          a.special-a(href='') Daily Tips
+        li
+          a(href='') Learn JS
+  main.main
+    article
+      time.date(datetime='2017-08-10') August 10, 2017
+      h1 How to test if an element is in the viewport with vanilla JavaScript
+      p
+        | Today, I want to show you how to write a small vanilla JS helper function to check if an element is in the viewport.
+      p
+        | &ldquo;In the viewport&rdquo; means in the visible part of the screen, as opposed to above or below the visible area.
+        | This is useful when doing things like creating lazy loading scripts.
+      section#sec1
+        h2
+          | Getting the bounding coordinates 
+          a.anchor(href='#sec1') #
+        p
+          | At the heart of our function is 
+          code.red-code Element.getBoundingClientRect()
+          | , which provides an element&rsquo;s position within the viewport.
+          | &#x9;&#x9;&#x9;&#x9;&#x9;It returns an object with an element&rsquo;s height and width, as well as it&rsquo;s distance from the top, bottom, left, and right of the viewport.
+        code.big-code
+          span.comment // Get the H1 heading
+          br
+          span.blue-span var
+          |  h1 
+          span.symbol-span =
+          span.blue-span document
+          span.comment .
+          | querySelector
+          span.comment (
+          span.green-span &apos;h1&apos;
+          span.comment );
+          br
+          br
+          span.comment // Get it&apos;s position in the viewport
+          br
+          span.blue-span var
+          |  bounding 
+          span.symbol-span =
+          |  h1
+          span.comment .
+          | getBoundingClientRect
+          span.comment ();
+          br
+          br
+          span.comment // Log the results
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;console
+          span.comment .
+          | log
+          span.comment (
+          | bounding
+          span.comment );
+          br
+          span.comment
+            | // {
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;height: 118,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;width: 591.359375,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;top: 137,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;bottom: 255,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;left: 40.3125,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;right: 631.671875
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// }
+      section#sec2
+        h2
+          | Determining if the element is in the viewport 
+          a.anchor(href='#sec2') #
+        p
+          | If an element is in the viewport, it&rsquo;s position from the 
+          code.red-code top
+          |  and 
+          code.red-code left
+          | &#x9;&#x9;&#x9;&#x9;&#x9;will always be greater than or equal to 
+          code.red-code 0
+          | . 
+          | &#x9;&#x9;&#x9;&#x9;&#x9;It&rsquo;s distance from the 
+          code.red-code right
+          |  will be less than or equal to the total width of the viewport,
+          | &#x9;&#x9;&#x9;&#x9;&#x9;and it&rsquo;s distance from the 
+          code.red-code bottom
+          | &#x9;&#x9;&#x9;&#x9;&#x9;will be less than or equal to the height of the viewport.
+        p
+          | There are two ways to check the viewport&rsquo;s width. Some browsers support 
+          code.red-code window.innerWidth
+          | ,
+          | &#x9;&#x9;&#x9;&#x9;&#x9;other&rsquo;s support 
+          code.red-code document.documentElement.clientWidth
+          | , and some support both.
+          | &#x9;&#x9;&#x9;&#x9;&#x9;We can try one and fallback to the other by doing something like this:
+        code.big-code
+          span.comment (
+          span.blue-span window
+          span.comment .
+          | innerWidth 
+          span.symbol-span ||
+          span.blue-span document
+          span.comment .
+          | documentElement
+          span.comment .
+          | clientWidth
+          span.comment )
+        p
+          | Similarly, to get the viewport height, we can use 
+          code.red-code window.innerHeight
+          |  in some browsers and 
+          code.red-code document.documentElement.clientHeight
+          | &#x9;&#x9;&#x9;&#x9;&#x9;in others. Like with width, we can try one and fallback to the other:
+        code.big-code
+          span.comment (
+          span.blue-span window
+          span.comment .
+          | innerHeight 
+          span.symbol-span ||
+          span.blue-span document
+          span.comment .
+          | documentElement
+          span.comment .
+          | clientHeight
+          span.comment )
+      section#sec3
+        h2
+          | Putting it all together 
+          a.anchor(href='#sec3') #
+        p Let&rsquo;s use that heading from earlier as an example.
+        code.big-code
+          span.comment // Get the H1 heading
+          br
+          span.blue-span var
+          |  h1 
+          span.symbol-span =
+          span.blue-span document
+          span.comment .
+          | querySelector
+          span.comment (
+          span.green-span &apos;h1&apos;
+          span.comment );
+          br
+          br
+          span.comment // Get it&apos;s position in the viewport
+          br
+          span.blue-span var
+          |  bounding 
+          span.symbol-span =
+          |  h1
+          span.comment .
+          | getBoundingClientRect
+          span.comment ();
+          br
+          br
+          span.comment // Log the results
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;console
+          span.comment .
+          | log
+          span.comment (
+          | bounding
+          span.comment );
+          br
+          span.comment
+            | // {
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;height: 118,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;width: 591.359375,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;top: 137,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;bottom: 255,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;left: 40.3125,
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// &#x9;right: 631.671875
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;// }
+        p We can check if the element is in the viewport like this.
+        code.big-code
+          span.blue-span if
+          span.comment (
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | top 
+          span.symbol-span &gt;=
+          span.red-code2 0
+          span.symbol-span &amp;&amp;
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | left 
+          span.symbol-span &gt;=
+          span.red-code2 0
+          span.symbol-span &amp;&amp;
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | right 
+          span.symbol-span
+        p
+          | That&rsquo;s super clunky to have to write out each time though, so this kind of thing deserves it&rsquo;s own helper function.
+        code.big-code
+          span.blue-span var
+          |  isInViewport 
+          span.symbol-span =
+          span.blue-span function
+          span.comment (
+          | elem
+          span.comment )
+          span.comment {
+          br
+          span.blue-span var
+          |  bounding 
+          span.symbol-span =
+          |  elem
+          span.comment .
+          | getBoundingClientRect
+          span.comment ();
+          br
+          span.blue-span return
+          span.comment (
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | top 
+          span.symbol-span &gt;=
+          span.red-code2 0
+          span.symbol-span &amp;&amp;
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | left 
+          span.symbol-span &gt;=
+          span.red-code2 0
+          span.symbol-span &amp;&amp;
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bounding
+          span.comment .
+          | bottom 
+          span.symbol-span
+        p
+          | We can pass in our element, and 
+          code.red-code isInViewport()
+          |  will get the bounding coordinates and run our check. 
+          | &#x9;&#x9;&#x9;&#x9;&#x9;It returns 
+          code.red-code true
+          |  if it&rsquo;s in the viewport, and 
+          code.red-code false
+          |  if it&rsquo;s not.
+        code.big-code
+          span.blue-span var
+          |  h1 
+          span.symbol-span =
+          span.blue-span document
+          span.comment .
+          | querySelector
+          span.comment (
+          span.green-span &apos;h1&apos;
+          span.comment );
+          br
+          span.blue-span if
+          span.comment (
+          | isInViewport
+          span.comment (
+          | h1
+          span.comment )) {
+          br
+          span.comment
+            | // Do something...
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;}
+      section#sec4
+        h2
+          | Using the helper method 
+          a.anchor(href='#sec4') #
+        p So how would you use it?
+        p
+          | One way I&rsquo;ve put this to use is in a lazy loading script.
+          | I listen for scroll events, and check if my image is in the viewport on scroll. If it is, I load it.
+        p Here&rsquo;s a really simplified version&mldr;
+        code.big-code &lt;figure data-image=&quot;url/to/my/image.jpg&quot;&gt;My image will go here...&lt;/figure&gt;
+        p
+        code.big-code
+          span.blue-span var
+          |  image 
+          span.symbol-span =
+          span.blue-span document
+          span.comment .
+          | querySelector
+          span.comment (
+          span.green-span &apos;[data-image]&apos;
+          span.comment );
+          br
+          span.blue-span window
+          span.comment .
+          | addEventListener
+          span.comment (
+          span.green-span &apos;scroll&apos;
+          span.comment ,
+          span.blue-span function
+          span.comment (
+          | event
+          span.comment ) {
+          br
+          span.blue-span if
+          span.comment (
+          | isInViewport
+          span.comment (
+          | image
+          span.comment )) {
+          br
+          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image
+          span.comment .
+          | innerHTML 
+          span.symbol-span =
+          span.green-span &apos;&lt;img src=&quot;&apos;
+          span.symbol-span +
+          |  image
+          span.comment .
+          | getAttribute
+          span.comment (
+          span.green-span &apos;data-image&apos;
+          span.comment )
+          span.symbol-span +
+          span.green-span &apos;&quot;&gt;&apos;
+          span.comment ;
+          br
+          span.comment
+            | }
+            br
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;},
+          span.red-code2 false
+          span.comment );
+        p
+          | You can 
+          a(href='') grab a copy of this helper function on the Vanilla JS Toolkit
+          | .
+        p.special-p
+          span.yellow-background-span
+            | &#x23F0;&#x1F989; 
+            span.bold-span Early Bird Sale!
+            |  A new session of the 
+            a(href='') Vanilla JS Academy
+            |  starts on May 11. Now through Tuesday, get 40% off the program.
+            a(href='') Click here to learn more.
+        p.special-p
+          span.bold-span Like this?
+          |  I send out a short email each weekday with code snippets, tools, techniques, and interesting stuff from around the web.
+          | &#x9;&#x9;&#x9;&#x9;&#x9;Join 8,700+ daily subscribers.
+      form
+        input.email1(type='email' placeholder='Your email address...')
+        button.button1(type='submit') Get Daily Developer Tips
+  footer.footer
+    hr.hr1
+    ul.footer-list
+      li
+        a(href='') About
+      li
+        a(href='') Daily Tips
+      li
+        a(href='') Learn JS
+      li
+        a(href='') Search
+    p
+      | Made with &#x2764;&#xFE0F; in Massachusetts. Unless otherwise noted, all code is free to use under the 
+      a(href='') MIT License
+      | . I also very irregularly share non-coding 
+      a(href='') thoughts
+      | .
